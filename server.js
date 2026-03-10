@@ -1,8 +1,14 @@
 require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
-const pool = require("./db");
-const routeRoutes = require("./routes/routeRoutes");
+
+const pool = require("./src/config/db");
+const initDB = require("./src/database/initDB");
+const authRoutes = require("./src/routes/authRoutes");
+const routeRoutes = require("./src/routes/routeRoutes");
+const tripRoutes = require("./src/routes/tripRoutes");
+
+const savedRouteRoutes = require("./src/routes/savedRouteRoutes");
 
 const app = express();
 
@@ -27,11 +33,21 @@ app.get("/test-db", async (req, res) => {
   }
 });
 
-// Use route routes
+// Routes
+app.use("/api", authRoutes);
 app.use("/api", routeRoutes);
+app.use("/api", tripRoutes);
+app.use("/api", savedRouteRoutes);
 
 const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+// Initialize DB then start server
+async function startServer() {
+  await initDB();
+
+  app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+  });
+}
+
+startServer();

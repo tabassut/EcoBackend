@@ -1,3 +1,4 @@
+
 const { getRoute } = require("../services/routeService");
 const { getWeather } = require("../services/weatherService");
 const { calculateCarbon } = require("../services/carbonService");
@@ -17,7 +18,7 @@ async function handleRouteRequest(req, res) {
       { name: "walk", profile: "foot-walking" }
     ];
 
-    // Check weather once
+    //  Check weather once
     let weather = null;
 
     try {
